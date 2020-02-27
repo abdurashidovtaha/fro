@@ -1,6 +1,5 @@
 import React from 'react';
 import { MESSAGE_STATUS_FAIL, MESSAGE_STATUS_SENT } from '../../constants';
-import { messageDelete } from '../../actions/actionCreators';
 
 // Переиспользуемый компонент, не должен лазить в state
 export default function Message({ item, onEdit, onResend, onDelete }) {

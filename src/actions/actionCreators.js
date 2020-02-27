@@ -1,4 +1,4 @@
-import { MESSAGE_CHANGE, MESSAGE_SAVE_REQUEST, MESSAGE_SAVE_SUCCESS, MESSAGE_SAVE_FAILURE, MESSAGES_SAVE_MESSAGE, MESSAGES_MESSAGE_STATUS_CHANGE, MESSAGE_EDIT, MESSAGES_FETCH_REQUEST, MESSAGES_FETCH_SUCCESS, MESSAGES_FETCH_FAILURE, MESSAGE_DELETE, MESSAGES_DELETE_REQUEST, MESSAGES_DELETE_FAILURE, MESSAGES_DELETE_SUCCESS } from "./actionTypes";
+import { MESSAGE_CHANGE, MESSAGE_SAVE_REQUEST, MESSAGE_SAVE_SUCCESS, MESSAGE_SAVE_FAILURE, MESSAGES_SAVE_MESSAGE, MESSAGES_MESSAGE_STATUS_CHANGE, MESSAGE_EDIT, MESSAGES_FETCH_REQUEST, MESSAGES_FETCH_SUCCESS, MESSAGES_FETCH_FAILURE, MESSAGES_DELETE_REQUEST, MESSAGES_DELETE_FAILURE, MESSAGES_DELETE_SUCCESS } from "./actionTypes";
 import nanoid from 'nanoid';
 import { MESSAGE_STATUS_SENT, MESSAGE_STATUS_FAIL, MESSAGE_STATUS_PENDING } from "../constants";
 import client from '../http'; // index.js писать не нужно
@@ -37,7 +37,7 @@ export const messagesFetch = () => async (dispatch, getState) => {
 export const messageDelete = async (dispatch, id) => {
     dispatch(messagesDeleteRequest());
     try {
-        const { data } = await client.delete(`/messages/${id}`);
+        await client.delete(`/messages/${id}`);
         dispatch(messagesDeleteSuccess(id));
     } catch (e) {
         dispatch(messagesDeleteFailure(e));

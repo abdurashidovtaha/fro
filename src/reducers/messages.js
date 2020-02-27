@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { MESSAGE_CHANGE, MESSAGE_SAVE_REQUEST, MESSAGE_SAVE_SUCCESS, MESSAGE_SAVE_FAILURE, MESSAGES_SAVE_MESSAGE, MESSAGES_MESSAGE_STATUS_CHANGE, MESSAGE_EDIT, MESSAGES_FETCH_REQUEST, MESSAGES_FETCH_SUCCESS, MESSAGES_FETCH_FAILURE, MESSAGES_DELETE_REQUEST, MESSAGES_DELETE_SUCCESS } from "../actions/actionTypes";
+import { MESSAGE_CHANGE, MESSAGE_SAVE_REQUEST, MESSAGES_SAVE_MESSAGE, MESSAGES_MESSAGE_STATUS_CHANGE, MESSAGE_EDIT, MESSAGES_FETCH_REQUEST, MESSAGES_FETCH_SUCCESS, MESSAGES_FETCH_FAILURE, MESSAGES_DELETE_REQUEST, MESSAGES_DELETE_SUCCESS } from "../actions/actionTypes";
 import { MESSAGE_STATUS_PENDING } from "../constants";
 
 const initialListState = {
@@ -27,7 +27,7 @@ export function messagesListReducer(state = initialListState, action) {
             if (items.length !== 0) {
                 last = items[items.length - 1];
             }
-            const lastSeenId = last && last.id || state.lastSeenId; // только для собеседования
+            const lastSeenId = ((last && last.id) || state.lastSeenId); // только для собеседования
             // 1. Не добавлять те элементы, которые уже есть
             // 2. Сделать удаление (пусть автоматически у других не удаляется) - удаляется только у вас
             console.log(items);
@@ -54,14 +54,11 @@ export function messagesListReducer(state = initialListState, action) {
             return { ...state, loading: true, error: null };
         }
         case MESSAGES_DELETE_SUCCESS:
-            return { ...state, items: state.items.filter(o => o.id !== action.payload.id)}
-        case MESSAGES_FETCH_SUCCESS: {
-            const { id } = action.payload;
-            return { ...state, items: state.items.map(o => o.id === id ? { ...o, removed: true } : o) };
-        }
+            return { ...state, items: state.items.filter(o => o.id !== action.payload.id) }
+        default:
+            return state;
     }
 
-    return state;
 }
 
 const initialEditState = {
@@ -98,10 +95,12 @@ export function messageEditReducer(state = initialEditState, action) {
             // сразу вычищаем поле ввода как в Telegram
             return { item: { ...initialEditState.item }, loading: true, error: null };
         }
+        default:
+            return state;
     }
-
-    return state;
 }
+
+
 
 /*
 messages: {
